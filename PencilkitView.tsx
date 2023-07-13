@@ -1,7 +1,11 @@
-import {ViewProps, requireNativeComponent} from 'react-native';
+import {
+  ViewProps,
+  requireNativeComponent,
+  ImageResolvedAssetSource,
+} from 'react-native';
 
 interface IProps extends ViewProps {
-  // Other Props here
+  imagePath?: ImageResolvedAssetSource | {uri: string};
 }
 
 const PencilKitView = requireNativeComponent<IProps>('PencilKit');

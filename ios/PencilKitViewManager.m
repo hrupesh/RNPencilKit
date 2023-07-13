@@ -10,17 +10,55 @@
 #import <PencilKit/PencilKit.h>
 #import <Photos/Photos.h>
 
-@interface PencilKitViewManager : RCTViewManager<PKToolPickerObserver>
+@interface PencilKitViewManager : RCTViewManager<PKToolPickerObserver, UIGestureRecognizerDelegate>
 @property PKCanvasView* canvasView;
 @property PKDrawing* drawing;
 @property UIImage* drawingImage;
 @property PKToolPicker* toolPicker;
+@property (nonatomic) NSObject* imagePath;
+@property UIImageView* imageView;
+@property CGFloat imageScale;
+@property UIView* contentView;
 @end
 
 @implementation PencilKitViewManager
 
 RCT_EXPORT_MODULE(PencilKit)
 
+RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
+  _imagePath = json;
+  NSURL *url = [NSURL URLWithString:[_imagePath valueForKey:@"uri"]];
+  NSData *data = [NSData dataWithContentsOfURL:url];
+  UIImage *image = [[UIImage alloc] initWithData:data];
+  _imageView = [[UIImageView alloc] initWithImage:image];
+  _imageView.contentMode = UIViewContentModeCenter;
+  _imageView.clipsToBounds = true;
+  UIPinchGestureRecognizer *pgr = [[UIPinchGestureRecognizer alloc]
+      initWithTarget:self action:@selector(handlePinchGesture:)];
+  pgr.delegate = self;
+  [_canvasView addGestureRecognizer:pgr];
+  [_imageView setContentScaleFactor:_imageScale];
+  [_canvasView insertSubview:_imageView atIndex:0];
+}
+
+- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer {
+     if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
+     _imageScale = [gestureRecognizer scale];
+     }
+
+     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan ||
+     [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
+        CGFloat currentScale = [[[gestureRecognizer view].layer valueForKeyPath:@"transform.scale"] floatValue];
+        const CGFloat kMaxScale = 4.0;
+        const CGFloat kMinScale = 1.0;
+        CGFloat newScale = 1 -  (_imageScale - [gestureRecognizer scale]);
+        newScale = MIN(newScale, kMaxScale / currentScale);
+        newScale = MAX(newScale, kMinScale / currentScale);
+        CGAffineTransform transform = CGAffineTransformScale([[gestureRecognizer view] transform], newScale, newScale);
+        [gestureRecognizer view].transform = transform;
+        _imageScale = [gestureRecognizer scale];
+      }
+}
 
 - (UIView *)view
 {
@@ -29,9 +67,10 @@ RCT_EXPORT_MODULE(PencilKit)
   _canvasView.drawingPolicy = PKCanvasViewDrawingPolicyAnyInput;
   _canvasView.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
   _canvasView.multipleTouchEnabled = true;
+  _canvasView.opaque = true;
+  _canvasView.backgroundColor = UIColor.clearColor;
   return _canvasView;
 }
-
 
 RCT_EXPORT_METHOD(setupToolPicker: (nonnull NSNumber *)viewTag)
 {
@@ -67,9 +106,12 @@ RCT_EXPORT_METHOD(captureDrawing: (nonnull NSNumber *)viewTag)
 
 -(void) captureDrawing{
   dispatch_async(dispatch_get_main_queue(), ^{
-    self->_drawingImage = [self->_canvasView.drawing imageFromRect:self->_canvasView.bounds scale:1.0];
+    UIGraphicsBeginImageContextWithOptions(self->_canvasView.bounds.size, self->_canvasView.opaque, 0.0f);
+    [self->_canvasView drawViewHierarchyInRect:self->_canvasView.bounds afterScreenUpdates:NO];
+    UIImage *snapshotImageFromMyView = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{[
-      PHAssetChangeRequest creationRequestForAssetFromImage:self->_drawingImage];
+      PHAssetChangeRequest creationRequestForAssetFromImage:snapshotImageFromMyView];
     } completionHandler:^(BOOL success, NSError *error) {
       if (success) {
         NSString *path = [NSString stringWithFormat:@"photos-redirect://"];

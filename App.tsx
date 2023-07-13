@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {
+  Dimensions,
   findNodeHandle,
   Image,
   Platform,
@@ -9,7 +10,7 @@ import {
   Text,
   UIManager,
 } from 'react-native';
-import {Clear, Save} from './assets/icons';
+import {Clear, Save, CanvasBackgroundImage} from './assets/icons';
 import PencilKitView from './PencilkitView';
 
 const App: React.FC = () => {
@@ -58,7 +59,15 @@ const App: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <PencilKitView ref={drawingRef} style={styles.container} />
+      <PencilKitView
+        ref={drawingRef}
+        style={styles.container}
+        imagePath={
+          Image.resolveAssetSource(CanvasBackgroundImage) || {
+            uri: 'https://picsum.photos/720/1080',
+          }
+        }
+      />
       <Pressable onPress={handleClearDrawing} style={styles.clearBtn}>
         <Image source={Clear} resizeMode={'contain'} style={styles.icon} />
       </Pressable>
@@ -72,7 +81,7 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff0',
   },
   icon: {
     height: 50,
