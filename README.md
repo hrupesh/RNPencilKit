@@ -4,11 +4,11 @@
 ----
 ### Sample Usage
 
-![Usage]()
+![Usage](https://github.com/hrupesh/RNPencilKit/blob/main/RNPencilKitUsage.png)
 
-[Read article here](https://blog.logrocket.com/build-react-native-drawing-app-pencilkit/)
+## [Read the full article here](https://blog.logrocket.com/build-react-native-drawing-app-pencilkit/)
 
-Considering giving the repo a ⭐️ if this helped you in any way.
+Consider giving the repo a ⭐️ if this helped you in any way.
 
 ----
 
