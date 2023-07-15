@@ -2,7 +2,7 @@
 //  PencilKitViewManager.m
 //  RNPencilKit
 //
-//  Created by rupesh on 22/04/23.
+//  Created by Rupesh Chaudhari
 //
 
 #import <React/RCTViewManager.h>
@@ -10,15 +10,12 @@
 #import <PencilKit/PencilKit.h>
 #import <Photos/Photos.h>
 
-@interface PencilKitViewManager : RCTViewManager<PKToolPickerObserver, UIGestureRecognizerDelegate>
+@interface PencilKitViewManager : RCTViewManager<PKToolPickerObserver, UIGestureRecognizerDelegate, PKCanvasViewDelegate>
 @property PKCanvasView* canvasView;
 @property PKDrawing* drawing;
-@property UIImage* drawingImage;
 @property PKToolPicker* toolPicker;
 @property (nonatomic) NSObject* imagePath;
 @property UIImageView* imageView;
-@property CGFloat imageScale;
-@property UIView* contentView;
 @end
 
 @implementation PencilKitViewManager
@@ -31,33 +28,7 @@ RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
   NSData *data = [NSData dataWithContentsOfURL:url];
   UIImage *image = [[UIImage alloc] initWithData:data];
   _imageView = [[UIImageView alloc] initWithImage:image];
-  _imageView.contentMode = UIViewContentModeCenter;
-  _imageView.clipsToBounds = true;
-  UIPinchGestureRecognizer *pgr = [[UIPinchGestureRecognizer alloc]
-      initWithTarget:self action:@selector(handlePinchGesture:)];
-  pgr.delegate = self;
-  [_canvasView addGestureRecognizer:pgr];
-  [_imageView setContentScaleFactor:_imageScale];
   [_canvasView insertSubview:_imageView atIndex:0];
-}
-
-- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer {
-     if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-     _imageScale = [gestureRecognizer scale];
-     }
-
-     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan ||
-     [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
-        CGFloat currentScale = [[[gestureRecognizer view].layer valueForKeyPath:@"transform.scale"] floatValue];
-        const CGFloat kMaxScale = 4.0;
-        const CGFloat kMinScale = 1.0;
-        CGFloat newScale = 1 -  (_imageScale - [gestureRecognizer scale]);
-        newScale = MIN(newScale, kMaxScale / currentScale);
-        newScale = MAX(newScale, kMinScale / currentScale);
-        CGAffineTransform transform = CGAffineTransformScale([[gestureRecognizer view] transform], newScale, newScale);
-        [gestureRecognizer view].transform = transform;
-        _imageScale = [gestureRecognizer scale];
-      }
 }
 
 - (UIView *)view
@@ -69,7 +40,23 @@ RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
   _canvasView.multipleTouchEnabled = true;
   _canvasView.opaque = true;
   _canvasView.backgroundColor = UIColor.clearColor;
+  _canvasView.delegate = self;
+  _canvasView.scrollEnabled = YES;
+  _canvasView.userInteractionEnabled = YES;
+  _canvasView.minimumZoomScale = 1.0;
+  _canvasView.maximumZoomScale = 4.0;
   return _canvasView;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+  return _imageView;
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
+  CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
+  CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
+  [_imageView setFrame:CGRectMake(_imageView.frame.origin.x, _imageView.frame.origin.y, _canvasView.frame.size.width * scrollView.zoomScale, _canvasView.frame.size.height * scrollView.zoomScale)];
+  _imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
 }
 
 RCT_EXPORT_METHOD(setupToolPicker: (nonnull NSNumber *)viewTag)
