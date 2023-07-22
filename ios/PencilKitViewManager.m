@@ -28,13 +28,17 @@ RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
   NSData *data = [NSData dataWithContentsOfURL:url];
   UIImage *image = [[UIImage alloc] initWithData:data];
   _imageView = [[UIImageView alloc] initWithImage:image];
+  [_imageView setContentMode:UIViewContentModeScaleAspectFit];
+  [_imageView setFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
   UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
+  [tempView setBackgroundColor:UIColor.whiteColor];
   [tempView addSubview:_imageView];
   UIGraphicsBeginImageContextWithOptions(tempView.bounds.size, self->_canvasView.opaque, 0.0f);
   [tempView drawViewHierarchyInRect:tempView.bounds afterScreenUpdates:YES];
   UIImage *snapshotImageFromView = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
   _imageView = [[UIImageView alloc] initWithImage:snapshotImageFromView];
+  _imageView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2 - 58);
   [_canvasView insertSubview:_imageView atIndex:0];
 }
 
