@@ -5,18 +5,11 @@
 //  Created by Rupesh Chaudhari
 //
 
+#import "PencilKitViewManager.h"
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
 #import <PencilKit/PencilKit.h>
 #import <Photos/Photos.h>
-
-@interface PencilKitViewManager : RCTViewManager<PKToolPickerObserver, UIGestureRecognizerDelegate, PKCanvasViewDelegate>
-@property PKCanvasView* canvasView;
-@property PKDrawing* drawing;
-@property PKToolPicker* toolPicker;
-@property (nonatomic) NSObject* imagePath;
-@property UIImageView* imageView;
-@end
 
 @implementation PencilKitViewManager
 
@@ -56,6 +49,8 @@ RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
   _canvasView.userInteractionEnabled = YES;
   _canvasView.minimumZoomScale = 1.0;
   _canvasView.maximumZoomScale = 4.0;
+  [_canvasView setBounces:NO];
+  [_canvasView setBouncesZoom:NO];
   return _canvasView;
 }
 
@@ -82,6 +77,7 @@ RCT_EXPORT_METHOD(setupToolPicker: (nonnull NSNumber *)viewTag)
     [self->_toolPicker addObserver:self->_canvasView];
     [self->_toolPicker addObserver:self];
     [self->_canvasView becomeFirstResponder];
+    self->_undoManager = [[self->_canvasView undoManager] init];
     NSLog(@"Set Toolpicker");
   });
 }
@@ -121,6 +117,26 @@ RCT_EXPORT_METHOD(captureDrawing: (nonnull NSNumber *)viewTag)
       }
     }];
   });
+}
+
+RCT_EXPORT_METHOD(undo: (nonnull NSNumber *)viewTag)
+{
+  NSLog(@"Undo Called");
+  [self undoDrawing];
+}
+
+-(void) undoDrawing{
+  [_undoManager undo];
+}
+
+RCT_EXPORT_METHOD(redo: (nonnull NSNumber *)viewTag)
+{
+  NSLog(@"Redo Called");
+  [self redoDrawing];
+}
+
+-(void) redoDrawing{
+  [_undoManager redo];
 }
 
 @end

@@ -44,6 +44,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-RNPencilKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNPencilKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RNPencilKit/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8276A28429F44163006E4FFB /* PencilKitViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PencilKitViewManager.m; sourceTree = "<group>"; };
+		82E9F5872A7E353800C53F4F /* PencilKitViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PencilKitViewManager.h; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RNPencilKit-RNPencilKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNPencilKit-RNPencilKitTests.release.xcconfig"; path = "Target Support Files/Pods-RNPencilKit-RNPencilKitTests/Pods-RNPencilKit-RNPencilKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -91,6 +92,7 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				8276A28429F44163006E4FFB /* PencilKitViewManager.m */,
+				82E9F5872A7E353800C53F4F /* PencilKitViewManager.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
