@@ -11,6 +11,8 @@
 #import <PencilKit/PencilKit.h>
 #import <Photos/Photos.h>
 
+#import "RNPencilKit.h"
+
 @implementation PencilKitViewManager
 
 RCT_EXPORT_MODULE(PencilKit)
@@ -51,6 +53,13 @@ RCT_CUSTOM_VIEW_PROPERTY(imagePath, NSObject, PencilKitViewManager) {
   _canvasView.maximumZoomScale = 4.0;
   [_canvasView setBounces:NO];
   [_canvasView setBouncesZoom:NO];
+  
+  [[RNPencilKit sharedInstance] loadData];
+  
+  if ([RNPencilKit sharedInstance].drawingData) {
+    _canvasView.drawing = [[PKDrawing alloc] initWithData:[RNPencilKit sharedInstance].drawingData error:nil];
+  }
+  
   return _canvasView;
 }
 
@@ -137,6 +146,11 @@ RCT_EXPORT_METHOD(redo: (nonnull NSNumber *)viewTag)
 
 -(void) redoDrawing{
   [_undoManager redo];
+}
+
+- (void)canvasViewDrawingDidChange:(PKCanvasView *)canvasView{
+  [RNPencilKit sharedInstance].drawingData = canvasView.drawing.dataRepresentation;
+  [[RNPencilKit sharedInstance] saveData];
 }
 
 @end

@@ -15,6 +15,7 @@
 		7699B88040F8A987B510C191 /* libPods-RNPencilKit-RNPencilKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-RNPencilKit-RNPencilKitTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8276A28529F44163006E4FFB /* PencilKitViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8276A28429F44163006E4FFB /* PencilKitViewManager.m */; };
+		82E9F58A2A87DC7700C53F4F /* RNPencilKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 82E9F5892A87DC7700C53F4F /* RNPencilKit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RNPencilKit/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8276A28429F44163006E4FFB /* PencilKitViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PencilKitViewManager.m; sourceTree = "<group>"; };
 		82E9F5872A7E353800C53F4F /* PencilKitViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PencilKitViewManager.h; sourceTree = "<group>"; };
+		82E9F5882A87DB9600C53F4F /* RNPencilKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPencilKit.h; sourceTree = "<group>"; };
+		82E9F5892A87DC7700C53F4F /* RNPencilKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPencilKit.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RNPencilKit-RNPencilKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNPencilKit-RNPencilKitTests.release.xcconfig"; path = "Target Support Files/Pods-RNPencilKit-RNPencilKitTests/Pods-RNPencilKit-RNPencilKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -92,6 +95,8 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				8276A28429F44163006E4FFB /* PencilKitViewManager.m */,
+				82E9F5882A87DB9600C53F4F /* RNPencilKit.h */,
+				82E9F5892A87DC7700C53F4F /* RNPencilKit.m */,
 				82E9F5872A7E353800C53F4F /* PencilKitViewManager.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -420,6 +425,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8276A28529F44163006E4FFB /* PencilKitViewManager.m in Sources */,
+				82E9F58A2A87DC7700C53F4F /* RNPencilKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
