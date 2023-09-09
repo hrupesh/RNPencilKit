@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {
-  Dimensions,
   findNodeHandle,
   Image,
   Platform,
@@ -11,7 +10,7 @@ import {
   TouchableOpacity,
   UIManager,
 } from 'react-native';
-import {Clear, Save, CanvasBackgroundImage} from './assets/icons';
+import {CanvasBackgroundImage, Clear, Save} from './assets/icons';
 import PencilKitView from './PencilkitView';
 
 const App: React.FC = () => {
@@ -24,7 +23,7 @@ const App: React.FC = () => {
         UIManager.getViewManagerConfig('PencilKit').Commands.setupToolPicker,
         undefined,
       );
-    }, 200);
+    }, 400);
   }, []);
 
   const handleClearDrawing = useCallback(() => {
@@ -33,7 +32,7 @@ const App: React.FC = () => {
       UIManager.getViewManagerConfig('PencilKit').Commands.clearDrawing,
       undefined,
     );
-  }, [drawingRef?.current]);
+  }, []);
 
   const handleCaptureDrawing = useCallback(() => {
     UIManager.dispatchViewManagerCommand(
@@ -41,7 +40,7 @@ const App: React.FC = () => {
       UIManager.getViewManagerConfig('PencilKit').Commands.captureDrawing,
       undefined,
     );
-  }, [drawingRef?.current]);
+  }, []);
 
   const handleUndo = useCallback(() => {
     UIManager.dispatchViewManagerCommand(
@@ -49,7 +48,7 @@ const App: React.FC = () => {
       UIManager.getViewManagerConfig('PencilKit').Commands.undo,
       undefined,
     );
-  }, [drawingRef?.current]);
+  }, []);
 
   const handleRedo = useCallback(() => {
     UIManager.dispatchViewManagerCommand(
@@ -57,18 +56,11 @@ const App: React.FC = () => {
       UIManager.getViewManagerConfig('PencilKit').Commands.redo,
       undefined,
     );
-  }, [drawingRef?.current]);
+  }, []);
 
   if (Platform.OS !== 'ios') {
     return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        ]}>
+      <SafeAreaView style={[styles.container, styles.centered]}>
         <Text style={styles.text}>{'We only support iOS For Now 😔'}</Text>
       </SafeAreaView>
     );
@@ -105,6 +97,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff0',
+  },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     height: 50,
